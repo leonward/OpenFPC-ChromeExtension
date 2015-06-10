@@ -1,0 +1,29 @@
+{
+  "name": "OpenFPC Actions",
+  "version": "1.0",
+  "description": "OpenFPC Chrome Extension: Grab packets direct from your browser",
+  "manifest_version": 2,
+  "permissions": [
+          "contextMenus", "http://*/", "https://*/",
+          "storage",
+          "tabs",
+          "downloads",
+          "<all_urls>"
+  ],
+  "icons": {
+          "16": "ofpc_ico_128.png",
+          "48": "ofpc_ico_128.png",
+          "128": "ofpc_ico_128.png"
+  },
+  "homepage_url": "http://www.openfpc.org",
+  "background": {
+    "persistent": true,
+    "background.page": "popup.html",
+    "scripts": ["background.js"]
+  },
+  "options_page": "options.html",
+  "browser_action": {
+    "default_icon": "ofpc_ico_128.png",
+    "default_popup": "popup.html"
+  }
+}
