@@ -139,6 +139,8 @@ function ofpcSearch(){
         console.log("Set rj to oj");
         if (oj.error) {
           console.log("Error performing request:" +oj.error);
+          var errortext = "<b>Error: " + oj.error + "</b>";
+          results.innerHTML=errortext;
         } else {
           console.log("Looks like success");
           showTable(oj);
