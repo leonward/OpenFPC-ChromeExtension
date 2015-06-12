@@ -5,9 +5,23 @@ var rj={};  // results json to store and send back to popup when it asks for it.
 var sj={sip: "",
         dip: "",
         spt: "",
-        dpt: ""
+        dpt: "",
+        stime: "",
+        etime: "",
+        limit: "",
 };
 
+
+function resetConstraints(){
+  console.log("DEBUG: Clearing search constraints");
+  sj={sip: "",
+        dip: "",
+        spt: "",
+        dpt: "",
+        stime: "",
+        etime: "",
+  };
+}
 
 function ofpcFetchPcap(constraint, type){
   console.log("Fetching selection is "+constraint);
@@ -64,6 +78,7 @@ function ofpcStatus(){
 function ofpcFetchLog(highlight, tab){
   console.log("Asked for Log Fetch");
   console.log("Asked for Fetch of " + highlight.selectionText);
+  resetConstraints();
   ofpcFetchPcap(highlight.selectionText,"logline");
 }
 
@@ -79,22 +94,29 @@ function ofpcFetchSport(highlight, tab){
 
 function ofpcSearchSip(highlight, tab){
   console.log("Asked for search of " + highlight.selectionText);
+  resetConstraints();
   sj.sip = highlight.selectionText;
   ofpcSearch(highlight.selectionText,"sip");
 }
 
 function ofpcSearchSpt(highlight, tab){
   console.log("Asked for search of " + highlight.selectionText);
+  resetConstraints();
+  sj.spt = highlight.selectionText;
   ofpcSearch(highlight.selectionText,"spt");
 }
 
 function ofpcSearchDip(highlight, tab){
   console.log("Asked for search of " + highlight.selectionText);
+  resetConstraints();
+  sj.dip = highlight.selectionText;
   ofpcSearch(highlight.selectionText,"dip");
 }
 
 function ofpcSearchDpt(highlight, tab){
   console.log("Asked for search of " + highlight.selectionText);
+  resetConstraints();
+  sj.dpt = highlight.selectionText;
   ofpcSearch(highlight.selectionText,"dpt");
 }
 
