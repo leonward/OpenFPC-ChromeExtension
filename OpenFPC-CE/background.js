@@ -10,6 +10,7 @@ var sj={sip: "",
         etime: "",
         limit: "",
 };
+var ej={};
 
 
 function resetConstraints(){
@@ -27,8 +28,8 @@ function ofpcFetchPcap(constraint, type){
   console.log("Fetching selection is "+constraint);
   console.log("Type of selection is "+type);
 
-  chrome.storage.sync.get(["apikey", "pre_secs", "post_secs", "last_secs", "ofpc_server"], function(ofpc) {
-    var theUrl = "http://" + ofpc.ofpc_server + ":4222/api/1/fetch?apikey=" + ofpc.apikey + "&" + type + "=" +constraint + "&last=" + ofpc.last_secs;
+  chrome.storage.sync.get(["apikey", "pre_secs", "post_secs", "last_secs", "ofpc_server", "ofpc_port"], function(ofpc) {
+    var theUrl = "http://" + ofpc.ofpc_server + ":" + ofpc.ofpc_port + "/api/1/fetch?apikey=" + ofpc.apikey + "&" + type + "=" +constraint + "&last=" + ofpc.last_secs;
     console.log(" The URL for request is " +theUrl);
     chrome.downloads.download({
       url: theUrl
@@ -39,8 +40,8 @@ function ofpcFetchPcap(constraint, type){
 function ofpcSearch(constraint, type){
   console.log("Searching packets for"+constraint);
  
-  chrome.storage.sync.get(["apikey", "pre_secs", "post_secs", "last_secs", "ofpc_server"], function(ofpc) {
-    var theUrl = "http://" + ofpc.ofpc_server + ":4222/api/1/search?apikey=" + ofpc.apikey + "&" + type + "=" + constraint + "&last=" + ofpc.last_secs;
+  chrome.storage.sync.get(["apikey", "pre_secs", "post_secs", "last_secs", "ofpc_server", "ofpc_port"], function(ofpc) {
+    var theUrl = "http://" + ofpc.ofpc_server + ":" + ofpc.ofpc_port + "/api/1/search?apikey=" + ofpc.apikey + "&" + type + "=" + constraint + "&last=" + ofpc.last_secs;
     console.log(" The URL for request is " +theUrl);
     var xmlHttp = new XMLHttpRequest();
 
@@ -48,6 +49,7 @@ function ofpcSearch(constraint, type){
       if (xmlHttp.readyState == 4) {
         // Got response back from API
         console.log ("Data is " + xmlHttp.response);
+        console.log (xmlHttp);
         var oj = JSON.parse(xmlHttp.response);
 
         // Show error if we have an error
@@ -55,6 +57,8 @@ function ofpcSearch(constraint, type){
         rj=oj;
         if (oj.error) {
           console.log("Error performing request:" +oj.error);
+          ej=oj;
+          console.log("Set ej error as " +ej.error);
         }
       }
     }
@@ -166,8 +170,12 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("Sending Search constraints" + sj);
     console.log(sj);
     sendResponse(sj);
+  } else if (request.method == "getError") {
+    console.log("Sending Error backs" + ej);
+    console.log(ej);
+    sendResponse(ej);
   } else  {
-    console.log("No idea what is being asked of me with"+request.method);
+    console.log("No idea what is being asked of me with "+request.method);
     sendResponse({}); 
    return true; 
   }

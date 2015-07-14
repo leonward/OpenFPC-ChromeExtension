@@ -32,6 +32,22 @@ function formatTime(ts){
   }
 }
 
+function showError(){
+  console.log("Asking if there is an error to show..");
+     chrome.runtime.sendMessage({
+      method: "getError",
+    },
+    function(j){
+      console.log("And the error response was...");
+      console.log(j);
+
+      if (j.error) {
+        var errorHtml = "<br>" + j.error + "<br>";
+        error.innerHTML=errorHtml;
+      }
+    });
+}
+
 function showResults(){
 	console.log("Asking if there are any results to show..");
      chrome.runtime.sendMessage({
@@ -80,8 +96,8 @@ function ofpcFetch(){
   var etime = document.getElementById('etime').value;
   var logline = document.getElementById('logline').value;
 
-  chrome.storage.sync.get(["apikey", "pre_secs", "post_secs", "last_secs", "ofpc_server"], function(ofpc) {
-    var theUrl = "http://" + ofpc.ofpc_server + ":4222/api/1/fetch?apikey=" + ofpc.apikey;
+  chrome.storage.sync.get(["apikey", "pre_secs", "post_secs", "last_secs", "ofpc_server", "ofpc_port"], function(ofpc) {
+    var theUrl = "http://" + ofpc.ofpc_server + ":" + ofpc.ofpc_port +  "/api/1/fetch?apikey=" + ofpc.apikey;
 
     if (sip) {theUrl = theUrl + "&sip=" + sip; }
     if (dip) {theUrl = theUrl + "&dip=" + dip; }
@@ -110,8 +126,8 @@ function ofpcSearch(){
   var logline = document.getElementById('logline').value;
   var limit = document.getElementById('limit').value;
 
-  chrome.storage.sync.get(["apikey", "pre_secs", "post_secs", "last_secs", "ofpc_server"], function(ofpc) {
-    var theUrl = "http://" + ofpc.ofpc_server + ":4222/api/1/search?apikey=" + ofpc.apikey;
+  chrome.storage.sync.get(["apikey", "pre_secs", "post_secs", "last_secs", "ofpc_server", "ofpc_port"], function(ofpc) {
+    var theUrl = "http://" + ofpc.ofpc_server + ":" + ofpc.ofpc_port +  "/api/1/search?apikey=" + ofpc.apikey;
 
     if (sip) {theUrl = theUrl + "&sip=" + sip; }
     if (dip) {theUrl = theUrl + "&dip=" + dip; }
@@ -202,6 +218,7 @@ function loadData(){
   console.log("Loading Data!");
   showResults();
   showSearch();
+  showError();
 }
 
 document.addEventListener('DOMContentLoaded', loadData);
