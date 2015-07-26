@@ -75,10 +75,14 @@ function showSearch(){
       var dip = document.getElementById('dip');
       var spt = document.getElementById('spt');
       var dpt = document.getElementById('dpt');
+      var stime = document.getElementById('stime');
+      var etime = document.getElementById('etime');
       sip.value = sj.sip;
       dip.value = sj.dip;
       dpt.value = sj.dpt;
       spt.value = sj.spt;
+      stime.value = sj.stime;
+      etime.value = sj.etime;
     });
     chrome.storage.sync.get(["limit"], function(ofpc) {
       var limit = document.getElementById('limit');
